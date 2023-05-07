@@ -4,6 +4,7 @@ const preload = {
   ...webpackBase,
 
   target: 'electron-preload',
+  devtool: false,
 
   entry: {
     preload: './preload.ts',

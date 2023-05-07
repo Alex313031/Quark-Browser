@@ -88,7 +88,7 @@
     "nsis": {
       "shortcutName": "Electron Shell Browser",
       "artifactName": "Electron_Shell_${version}_${arch}.${ext}",
-      "deleteAppDataOnUninstall": true,
+      "deleteAppDataOnUninstall": false,
       "uninstallDisplayName": "Electron Shell ${version}"
     }
   }

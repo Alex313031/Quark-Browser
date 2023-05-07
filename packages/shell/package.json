@@ -7,25 +7,89 @@
   "scripts": {
     "build": "tsc && webpack",
     "start": "electron .",
-    "clean": "rimraf dist preload.js preload.js.map node_modules",
-    "distclean": "rimraf dist preload.js preload.js.map",
+    "clean": "rimraf dist preload.js preload.js.map out node_modules",
+    "distclean": "rimraf dist preload.js preload.js.map out",
+    "dist": "electron-builder",
     "test": "npm run build"
   },
   "license": "GPL-3.0",
   "author": "Samuel Maddock <sam@samuelmaddock.com>",
+  "homepage": "https://github.com/samuelmaddock/electron-browser-shell/tree/master/packages/shell",
   "private": true,
   "dependencies": {
-    "electron": "22.3.8",
     "electron-chrome-context-menu": "1.1.1",
     "electron-chrome-extensions": "3.10.1",
     "electron-log": "^4.4.8"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
+    "electron": "22.3.8",
+    "electron-builder": "^22.14.13",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.5",
     "rimraf": "^3.0.2",
     "webpack": "^5.79.0",
     "webpack-cli": "^4.10.0"
+  },
+  "build": {
+    "electronVersion": "22.3.7",
+    "asar": false,
+    "electronDownload": {
+        "isVerifyChecksum": false,
+        "strictSSL": false,
+        "cache": "electron",
+        "mirror": "https://github.com/Alex313031/electron-22/releases/download/v"
+    },
+    "directories": {
+      "app": ".",
+      "output": "out"
+    },
+    "extraFiles": [
+      {
+        "from": "icon.png"
+      },
+      {
+        "from": "extensions",
+        "to": "extensions"
+      }
+    ],
+    "appId": "com.electron.shell-browser",
+    "files": [
+      "**/*",
+      "!electron/"
+    ],
+    "linux": {
+      "target": [
+        "zip",
+        "deb"
+      ],
+      "maintainer": "Samuel Maddock",
+      "vendor": "Alex313031",
+      "synopsis": "Minimum Viable Browser shell built on Electron.",
+      "category": "Network;Browser;",
+      "executableName": "electron-shell",
+      "artifactName": "electron-shell_${version}_${arch}.${ext}",
+      "desktop": {
+        "Name": "Electron Shell Browser",
+        "StartupWMClass": "electron-shell",
+        "Keywords": "electron;webview;browser;extensions;",
+        "Icon": "electron-shell"
+      }
+    },
+    "win": {
+      "target": [
+        "zip",
+        "nsis"
+      ],
+      "publisherName": "Alex313031",
+      "executableName": "electron_shell",
+      "artifactName": "Electron_Shell_${version}_${arch}.${ext}"
+    },
+    "nsis": {
+      "shortcutName": "Electron Shell Browser",
+      "artifactName": "Electron_Shell_${version}_${arch}.${ext}",
+      "deleteAppDataOnUninstall": true,
+      "uninstallDisplayName": "Electron Shell ${version}"
+    }
   }
 }

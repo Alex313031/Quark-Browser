@@ -17,6 +17,7 @@
     "distclean": "yarn --cwd ./packages/electron-chrome-context-menu distclean && yarn --cwd ./packages/electron-chrome-extensions distclean && yarn --cwd ./packages/shell distclean",
     "start": "yarn build && yarn --cwd ./packages/shell start",
     "electron": "yarn --cwd ./packages/shell start",
+    "dist": "yarn run build && yarn --cwd ./packages/shell dist",
     "start:debug": "cross-env SHELL_DEBUG=true DEBUG='electron-chrome-extensions*' yarn start",
     "test": "yarn test:extensions && yarn test:shell",
     "test:extensions": "yarn --cwd ./packages/electron-chrome-extensions test",

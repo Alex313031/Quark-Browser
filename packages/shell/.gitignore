@@ -1,3 +1,8 @@
 preload.js
 preload.js.map
 dist
+/electron/
+out/*
+extensions/*
+!extensions/.gitkeep
+!extensions/README.md

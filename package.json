@@ -1,6 +1,6 @@
 {
   "name": "electron-browser-shell",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A minimal browser shell built on Electron.",
   "private": true,
   "workspaces": [
@@ -13,7 +13,10 @@
     "build:context-menu": "yarn --cwd ./packages/electron-chrome-context-menu build",
     "build:extensions": "yarn --cwd ./packages/electron-chrome-extensions build",
     "build:shell": "yarn --cwd ./packages/shell build",
+    "clean": "yarn --cwd ./packages/electron-chrome-context-menu clean && yarn --cwd ./packages/electron-chrome-extensions clean && yarn --cwd ./packages/shell clean && rimraf node_modules",
+    "distclean": "yarn --cwd ./packages/electron-chrome-context-menu distclean && yarn --cwd ./packages/electron-chrome-extensions distclean && yarn --cwd ./packages/shell distclean",
     "start": "yarn build && yarn --cwd ./packages/shell start",
+    "electron": "yarn --cwd ./packages/shell start",
     "start:debug": "cross-env SHELL_DEBUG=true DEBUG='electron-chrome-extensions*' yarn start",
     "test": "yarn test:extensions && yarn test:shell",
     "test:extensions": "yarn --cwd ./packages/electron-chrome-extensions test",
@@ -21,7 +24,9 @@
   },
   "license": "GPL-3.0",
   "author": "Samuel Maddock <sam@samuelmaddock.com>",
-  "dependencies": {},
+  "dependencies": {
+    "rimraf": "^3.0.2"
+  },
   "repository": "git@github.com:samuelmaddock/electron-browser-shell.git",
   "prettier": {
     "printWidth": 100,

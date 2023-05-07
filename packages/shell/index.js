@@ -1,2 +1,2 @@
-const Browser = require('./browser/main')
+const Browser = require('./browser/main');
 new Browser()

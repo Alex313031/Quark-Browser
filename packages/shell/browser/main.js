@@ -1,11 +1,11 @@
-const path = require('path')
-const { promises: fs } = require('fs')
-const { app, session, BrowserWindow } = require('electron')
-
-const { Tabs } = require('./tabs')
-const { ElectronChromeExtensions } = require('electron-chrome-extensions')
-const { setupMenu } = require('./menu')
-const { buildChromeContextMenu } = require('electron-chrome-context-menu')
+const path = require('path');
+const { promises: fs } = require('fs');
+const { app, session, BrowserWindow, globalShortcut } = require('electron');
+const log = require('electron-log');
+const { Tabs } = require('./tabs');
+const { ElectronChromeExtensions } = require('electron-chrome-extensions');
+const { setupMenu } = require('./menu');
+const { buildChromeContextMenu } = require('electron-chrome-context-menu');
 
 let webuiExtensionId
 
@@ -52,10 +52,11 @@ async function loadExtensions(session, extensionsPath) {
   const results = []
 
   for (const extPath of extensionDirectories.filter(Boolean)) {
-    console.log(`Loading extension from ${extPath}`)
+    console.log(`Loading extension from ${extPath}`);
     try {
       const extensionInfo = await session.loadExtension(extPath)
       results.push(extensionInfo)
+      console.log(`[OK]`);
     } catch (e) {
       console.error(e)
     }
@@ -74,7 +75,7 @@ const getParentWindowOfTab = (tab) => {
     case 'backgroundPage':
       return BrowserWindow.getFocusedWindow()
     default:
-      throw new Error(`Unable to find parent window of '${tab.getType()}'`)
+      throw new Error(`Unable to find parent window of '${tab.getType()}!'`)
   }
 }
 
@@ -128,6 +129,7 @@ class Browser {
 
   constructor() {
     app.whenReady().then(this.init.bind(this))
+    console.log(`\nElectron Shell Browser is up!\n`);
 
     app.on('window-all-closed', () => {
       if (process.platform !== 'darwin') {
@@ -136,6 +138,12 @@ class Browser {
     })
 
     app.on('web-contents-created', this.onWebContentsCreated.bind(this))
+    //app.on("ready", () => {
+      //globalShortcut.register("CommandOrControl+W", () => {
+        //const win = this.getWindowFromWebContents(webContents)
+        //win.tabs.remove()
+      //});
+    //});
   }
 
   destroy() {
@@ -178,7 +186,7 @@ class Browser {
           this.windows.find((w) => w.id === details.windowId)
 
         if (!win) {
-          throw new Error(`Unable to find windowId=${details.windowId}`)
+          throw new Error(`Unable to find windowId=${details.windowId}!`)
         }
 
         const tab = win.tabs.create()
@@ -245,13 +253,17 @@ class Browser {
       window: {
         width: 1280,
         height: 720,
-        frame: false,
+        frame: process.env.SHELL_DEBUG,
+        icon: path.join(__dirname, './icon.png'),
         webPreferences: {
           sandbox: true,
           nodeIntegration: false,
           enableRemoteModule: false,
+          devTools: true,
+          experimentalFeatures: true,
           contextIsolation: true,
           worldSafeExecuteJavaScript: true,
+          // webviewTag: true
         },
       },
     })
@@ -261,13 +273,18 @@ class Browser {
       win.webContents.openDevTools({ mode: 'detach' })
     }
 
+    if (process.env.SHELL_DEBUG) {
+      const gpuWindow = new BrowserWindow({ width: 1024, height: 768 });
+      gpuWindow.loadURL('chrome://gpu');
+    }
+
     return win
   }
 
   async onWebContentsCreated(event, webContents) {
     const type = webContents.getType()
     const url = webContents.getURL()
-    console.log(`'web-contents-created' event [type:${type}, url:${url}]`)
+    log.info(`'web-contents-created' event [ type: ${type} ]`);
 
     if (process.env.SHELL_DEBUG && webContents.getType() === 'backgroundPage') {
       webContents.openDevTools({ mode: 'detach', activate: true })
@@ -286,6 +303,8 @@ class Browser {
             const win = this.getWindowFromWebContents(webContents)
             const tab = win.tabs.create()
             tab.loadURL(details.url)
+            const currentURL = (details.url)
+            console.log(` > Loaded URL: "${currentURL}"`);
           })
 
           return { action: 'deny' }
@@ -318,5 +337,23 @@ class Browser {
     })
   }
 }
+
+// Enable experimental web features
+//app.commandLine.appendSwitch('enable-experimental-web-platform-features');
+// Including new Canvas2D APIs
+app.commandLine.appendSwitch('new-canvas-2d-api');
+// These two allow easier local web development
+// Allow file:// URIs to read other file:// URIs
+app.commandLine.appendSwitch('allow-file-access-from-files');
+// Enable local DOM to access all resources in a tree
+app.commandLine.appendSwitch('enable-local-file-accesses');
+// Enable QUIC for faster handshakes
+app.commandLine.appendSwitch('enable-quic');
+// Enable inspecting ALL layers
+app.commandLine.appendSwitch('enable-ui-devtools');
+// Force enable GPU acceleration
+app.commandLine.appendSwitch('ignore-gpu-blocklist');
+// Force enable GPU rasterization
+app.commandLine.appendSwitch('enable-gpu-rasterization');
 
 module.exports = Browser

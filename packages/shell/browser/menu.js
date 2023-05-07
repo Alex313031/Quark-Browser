@@ -1,10 +1,11 @@
-const { Menu } = require('electron')
+const { Menu, BrowserWindow } = require('electron');
 
 const setupMenu = (browser) => {
   const isMac = process.platform === 'darwin'
 
   const tab = () => browser.getFocusedWindow().getFocusedTab()
   const tabWc = () => tab().webContents
+  const gpuWindow = () => new BrowserWindow({ width: 1024, height: 768 });
 
   const template = [
     ...(isMac ? [{ role: 'appMenu' }] : []),
@@ -26,10 +27,16 @@ const setupMenu = (browser) => {
           click: () => tabWc().reloadIgnoringCache(),
         },
         {
-          label: 'Toggle Developer Tool asdf',
+          label: 'Toggle Developer Tools',
           accelerator: isMac ? 'Alt+Command+I' : 'Ctrl+Shift+I',
           nonNativeMacOSRole: true,
           click: () => tabWc().toggleDevTools(),
+        },
+        {
+          label: 'Open chrome://gpu',
+          accelerator: 'Alt+G',
+          nonNativeMacOSRole: true,
+          click: () => gpuWindow().loadURL('chrome://gpu'),
         },
         { type: 'separator' },
         { role: 'resetZoom' },

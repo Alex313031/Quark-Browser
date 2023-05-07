@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>Shell Browser</title>
+    <meta charset="utf-8" />
+    <title>Electron Shell Browser</title>
     <style>
       :root {
         /* https://colorhunt.co/palette/161920 */
@@ -30,7 +30,7 @@
       body {
         padding: 0;
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif;
+        font-family: 'Roboto';
         font-size: 16px;
         color: var(--text-color);
       }
@@ -65,24 +65,28 @@
       #createtab {
         background: transparent;
         border: none;
-        color: #fff;
         font-weight: bold;
-        font-family: 'Courier New', Courier, monospace;
+        font-family: 'Roboto';
       }
 
       #createtab:hover {
-        background: rgba(255,255,255,0.2);
+        background: rgba(255,255,255,0.25);
+      }
+
+      #createtab:active {
+        background: rgba(255,255,255,0.33);
       }
 
       .tab {
-        padding: 0.2rem 0.4rem;
+        padding: 0.4rem 0.4rem;
         height: 100%;
         overflow: hidden;
         display: flex;
         flex-wrap: nowrap;
         align-items: center;
         width: 12rem;
-        box-shadow: inset -1px 0 0 0 rgba(0,0,0,0.33);
+        min-width: 1rem;
+        box-shadow: inset -2px 0px 2px 0px rgba(0,0,0,0.33);
       }
 
       .tab[data-active] {
@@ -101,7 +105,7 @@
         min-width: 0;
         text-overflow: ellipsis;
         overflow: hidden;
-        font-size: 0.725rem;
+        font-size: 0.850rem;
         user-select: none;
       }
 
@@ -111,14 +115,13 @@
       }
 
       .tab .controls .control {
-        background: rgba(0,0,0,0.2);
+        background: rgba(0,0,0,0.25);
         border: none;
         border-radius: 50%;
         padding: 0;
         margin-left: 0.2rem;
         width: 1rem;
         height: 1rem;
-        color: #aaa;
         font-size: 0.7rem;
         vertical-align: middle;
         line-height: 0;
@@ -126,6 +129,10 @@
 
       .tab .controls .control:disabled {
         display: none;
+      }
+
+      .tab .controls .control:active {
+        background: rgba(0,0,0,0.33);
       }
 
       .app-drag {
@@ -146,11 +153,15 @@
         width: 2.5rem;
         background: none;
         border: none;
-        color: #fff;
+        color: #ececec;
       }
 
       .window-controls .control:hover {
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(255,255,255,0.25);
+      }
+
+      .window-controls .control:active {
+        background: rgba(255,255,255,0.33);
       }
 
       /*----- TOOLBAR -----*/
@@ -181,7 +192,14 @@
         border: none;
         border-radius: 2rem;
         padding: 0 0.5rem;
+        padding-bottom: 0.1rem;
         outline: none;
+      }
+
+      .address-bar:active {
+        outline: 1px solid;
+        outline-color: #1be;
+        border-radius: 2rem;
       }
 
       .toolbar .control {
@@ -191,6 +209,31 @@
         height: 1.5rem;
         padding: 0;
         line-height: 0;
+      }
+
+      .ui {
+        color: #ececec;
+      }
+
+      .ui:hover {
+        color: #1be;
+      }
+
+      .x:hover {
+        color: rgb(229, 28, 35);
+      }
+
+      .newtab:hover {
+        color: #ececec;
+      }
+
+      .ui:active {
+        filter: brightness(1.33);
+      }
+
+      .audio:active {
+        background: rgba(0,0,0,0.33);
+        filter: brightness(1.33);
       }
     </style>
   </head>
@@ -203,25 +246,29 @@
               <img class="favicon" />
               <span class="title"></span>
               <div class="controls">
-                <button class="control audio" disabled>🔊</button>
-                <button class="control close">🗙</button>
+                <button class="control audio ui" disabled><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 12 12" fill-rule="evenodd"><path fill="currentColor" stroke-width="0px" stroke-linecap="round" shape-rendering="geometricPrecision" d="M 1 4.29 L 1 7.71 L 3.22 7.71 L 6 10.56 L 6 1.44 L 3.22 4.29 L 1 4.29 Z M 8.5 6 C 8.5 4.99 7.93 4.12 7.11 3.7 L 7.11 8.29 C 7.93 7.88 8.5 7.01 8.5 6 Z M 7.11 1 L 7.11 2.17 C 8.72 2.66 9.89 4.19 9.89 6 C 9.89 7.81 8.72 9.34 7.11 9.83 L 7.11 11 C 9.34 10.48 11 8.44 11 6 C 11 3.56 9.34 1.52 7.11 1 Z"/></svg></button>
+                <button class="control close ui x"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill-rule="evenodd"><path fill="currentColor" stroke-width="0px" stroke-linecap="round" shape-rendering="geometricPrecision" d="M 19 6.41 L 17.59 5 L 12 10.59 L 6.41 5 L 5 6.41 L 10.59 12 L 5 17.59 L 6.41 19 L 12 13.41 L 17.59 19 L 19 17.59 L 13.41 12 Z"/></svg></button>
               </div>
             </li>
           </template>
         </ul>
-        <button id="createtab">+</button>
+        <button title="New Tab" id="createtab" class="ui newtab"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" viewBox="0 0 24 18" fill-rule="evenodd"><path fill="currentColor" stroke-width="0px" stroke-linecap="round" shape-rendering="geometricPrecision" d="M 21 13 h -8 v 8 h -3 v -8 H 2 v -3 h 8 V 2 h 3 v 8 h 8 Z"/></svg></button>
         <div class="app-drag"></div>
         <div class="window-controls">
-          <button id="minimize" class="control">🗕</button>
-          <button id="maximize" class="control">🗖</button>
-          <button id="close" class="control">🗙</button>
+          <button id="minimize" class="control ui" style="color: #ececec">🗕</button>
+          <button id="maximize" class="control ui" style="color: #ececec">🗖</button>
+          <button id="close" class="control ui x">🗙</button>
         </div>
       </div>
       <div class="toolbar">
         <div class="page-controls">
-          <button id="goback" class="control">⬅️</button>
-          <button id="goforward" class="control">➡️</button>
-          <button id="reload" class="control">🔄</button>
+          <button title="Go Back" id="goback" class="control ui"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 32 32" fill-rule="evenodd"><path fill="currentColor" stroke-width="0px" stroke-linecap="round" shape-rendering="geometricPrecision" d="M 23.01 25.86 L 23.01 25.85 L 23.01 6.15 L 23.01 6.14 C 23.01 6.14 23 6.14 23 6.14 L 10.37 15.42 C 10.13 15.6 9.99 15.81 9.99 16 C 9.99 16.19 10.13 16.4 10.37 16.58 L 23 25.85 C 23 25.86 23.01 25.86 23.01 25.86 Z M 22.96 5.76 L 22.95 5.76 L 22.96 5.76 Z M 23.34 3 C 23.73 3 24.12 3.09 24.47 3.26 C 25.44 3.75 26 4.8 26 6.15 L 26 25.85 C 26 27.2 25.44 28.25 24.47 28.74 C 23.5 29.22 22.32 29.03 21.22 28.23 L 8.59 18.95 C 7.58 18.2 7 17.13 7 16 C 7 14.87 7.58 13.8 8.59 13.05 L 21.22 3.77 C 21.91 3.26 22.65 3 23.34 3 Z"/></svg></button>
+
+          <button title="Go Forward" id="goforward" class="control ui"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 32 32" fill-rule="evenodd"><path fill="currentColor" stroke-width="0px" stroke-linecap="round" shape-rendering="geometricPrecision" d="M 9.99 6.14 L 9.99 6.15 L 9.99 25.85 L 9.99 25.86 C 9.99 25.86 10 25.86 10 25.86 L 22.63 16.58 C 22.87 16.4 23.01 16.19 23.01 16 C 23.01 15.81 22.87 15.6 22.63 15.42 L 10 6.15 C 10 6.14 9.99 6.14 9.99 6.14 Z M 10.04 26.24 L 10.05 26.24 L 10.04 26.24 Z M 9.66 29 C 9.27 29 8.88 28.91 8.53 28.74 C 7.56 28.25 7 27.2 7 25.85 L 7 6.15 C 7 4.8 7.56 3.75 8.53 3.26 C 9.5 2.78 10.68 2.97 11.78 3.77 L 24.41 13.05 C 25.42 13.8 26 14.87 26 16 C 26 17.13 25.42 18.2 24.41 18.95 L 11.78 28.23 C 11.09 28.74 10.35 29 9.66 29 Z"/></svg></button>
+
+          <button title="Reload" id="reload" class="control ui"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 32 32" fill-rule="evenodd"><path fill="currentColor" stroke-width="0px" stroke-linecap="round" shape-rendering="geometricPrecision" d="M 25.1 20.15 L 25.08 20.14 C 23.51 23.59 20.04 26 16 26 C 10.48 26 6 21.52 6 16 C 6 10.48 10.48 6 16 6 C 19.02 6 21.72 7.34 23.55 9.45 L 23.55 9.45 L 19 14 L 25.8 14 L 28.83 14 L 30 14 L 30 3 L 25.67 7.33 C 23.3 4.67 19.85 3 16 3 C 8.82 3 3 8.82 3 16 C 3 23.18 8.82 29 16 29 C 21.27 29 25.8 25.86 27.84 21.34 C 27.96 21.13 28.03 20.88 28.03 20.61 C 28.03 19.78 27.36 19.11 26.53 19.11 C 25.87 19.11 25.3 19.55 25.1 20.15 Z"/></svg></button>
+
+          <button title="Open Home Page" id="home" class="control ui"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 32 32" fill-rule="evenodd"><path fill="currentColor" stroke-width="0px" stroke-linecap="round" shape-rendering="geometricPrecision" d="M 9 14.46 L 16 7.63 L 23 14.46 L 23 25.13 L 23 25.13 L 23 26 L 22.13 26 L 9.73 26 L 9 26 L 9 25.27 L 9 14.46 L 9 14.46 Z M 6 17.39 L 5.86 17.52 C 5.21 18.16 4.15 18.16 3.49 17.52 C 2.84 16.88 2.84 15.85 3.49 15.21 L 13.63 5.31 L 16 3 L 18.37 5.31 L 28.51 15.21 C 29.16 15.85 29.16 16.88 28.51 17.52 C 27.85 18.16 26.79 18.16 26.14 17.52 L 26 17.39 L 26 27 C 26 28.1 25.1 29 24 29 L 8 29 C 6.9 29 6 28.1 6 27 L 6 17.39 L 6 17.39 Z"/></svg></button>
         </div>
         <div class="address-bar">
           <input id="addressurl" spellcheck="false" />

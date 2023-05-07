@@ -1,6 +1,7 @@
 extensions/*
 !extensions/.gitkeep
 !extensions/README.md
-
 disabled/
+/electron/
 node_modules
+yarn-error.log

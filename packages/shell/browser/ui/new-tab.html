@@ -2,27 +2,36 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>New Tab</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="./imgs/ntp_favicon.png">
     <style>
+      * {
+        box-sizing: border-box;
+      }
       body {
         font-size: 16px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        font-family: 'Roboto';
       }
     </style>
   </head>
   <body>
-    <h1>New Tab</h1>
+    <h1><u>New Tab</u></h1>
     <ul>
-      <li><a href="https://www.google.com">https://www.google.com</a></li>
-      <li><a href="https://www.youtube.com">https://www.youtube.com</a></li>
+      <li><a href="https://www.google.com" target="_blank" rel="noopener">https://www.google.com</a></li>
+      <li><a href="https://www.youtube.com" target="_blank" rel="noopener">https://www.youtube.com</a></li>
+      <li><a href="https://www.wikipedia.org" target="_blank" rel="noopener">https://www.wikipedia.org</a></li>
       <li>
-        <a href="https://github.com/electron/electron">https://github.com/electron/electron</a>
+        <a href="https://github.com/electron/electron" target="_blank" rel="noopener">https://github.com/electron/electron</a>
       </li>
+      <li><a href="https://www.chromium.org" target="_blank" rel="noopener">https://www.chromium.org</a></li>
       <li>
-        <a href="https://github.com/samuelmaddock/electron-browser-shell"
-          >https://github.com/samuelmaddock/electron-browser-shell</a
-        >
+        <a href="https://github.com/samuelmaddock/electron-browser-shell" target="_blank" rel="noopener">https://github.com/samuelmaddock/electron-browser-shell</a>
       </li>
-      <li><a href="https://app.getmetastream.com/">https://app.getmetastream.com/</a></li>
+      <li><a href="https://app.getmetastream.com" target="_blank" rel="noopener">https://app.getmetastream.com</a></li>
     </ul>
+    <p>Learn more about this app <a href="./about.html">Here</a>.</p>
   </body>
 </html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>About App</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="./imgs/app_favicon.png">
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-size: 16px;
+        max-width: 42rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        font-family: 'Roboto';
+      }
+      code {
+        font-weight: bold;
+      }
+      .logo {
+        margin-top: -12px;
+        margin-bottom: -6px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1><u>About Electron Shell Browser</u>&nbsp;
+      <span><a href="./imgs/logo.png" target="_blank"><img title="Logo (Click Me!)" width="48px" height="48px" class="logo" src="./imgs/logo.png"></img></a></span>
+    </h1>
+    <p><code><a target="_blank" rel="noopener" href="https://github.com/samuelmaddock/electron-browser-shell#readme">electron-browser-shell</a></code> is a minimal, tabbed web browser with support for (some) Chromium extension APIs.</p>
+    <hr/>
+    <p>It is built on <a href="https://www.electronjs.org/" target="_blank" rel="noopener">Electron</a>, and utilizes two npm packages to achieve its functions. They are:<br/>
+    <ul>
+      <li>
+        <code><a href="https://github.com/samuelmaddock/electron-browser-shell/tree/master/packages/electron-chrome-context-menu#readme" target="_blank" rel="noopener">electron-chrome-context-menu</a></code> - a module that aims to painlessly recreate the Chromium native context menu, with (close to) feature parity with Chromium.
+      </li>
+      <br/>
+	  <li>
+        <code><a href="https://github.com/samuelmaddock/electron-browser-shell/tree/master/packages/electron-chrome-extensions#readme" target="_blank" rel="noopener">electron-chrome-extensions</a></code> - a library that aims to recreate some missing or incomplete Chromium extension APIs in Electron.
+      </li>
+    </ul>
+    Electron has partial support for a subset of <a href="https://developer.chrome.com/docs/extensions/reference/" target="_blank" rel="noopener">these APIs</a>, as per <a href="https://www.electronjs.org/docs/latest/api/extensions" target="_blank" rel="noopener">Here</a>, but usually not enough to meaningfully utilize popular extensions on the Chrome Web Store.<br/>
+    This app can be used standalone to test the progress of Electron Chrome Extensions, as a minimal browser for fun, or as a boilerplate to create your own Electron based browser.</p>
+    <hr/>
+  </body>
+</html>

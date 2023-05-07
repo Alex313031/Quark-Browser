@@ -1,5 +1,5 @@
-const { EventEmitter } = require('events')
-const { BrowserView } = require('electron')
+const { EventEmitter } = require('events');
+const { BrowserView } = require('electron');
 
 const toolbarHeight = 62
 
@@ -96,7 +96,7 @@ class Tabs extends EventEmitter {
   remove(tabId) {
     const tabIndex = this.tabList.findIndex((tab) => tab.id === tabId)
     if (tabIndex < 0) {
-      throw new Error(`Tabs.remove: unable to find tab.id = ${tabId}`)
+      throw new Error(`tabs.remove: unable to find tab.id = ${tabId}`)
     }
     const tab = this.tabList[tabIndex]
     this.tabList.splice(tabIndex, 1)

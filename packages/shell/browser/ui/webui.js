@@ -13,6 +13,7 @@ class WebUI {
       goBackButton: $('#goback'),
       goForwardButton: $('#goforward'),
       reloadButton: $('#reload'),
+      homeButton: $('#home'),
       addressUrl: $('#addressurl'),
 
       browserActions: $('#actions'),
@@ -26,6 +27,7 @@ class WebUI {
     this.$.goBackButton.addEventListener('click', () => chrome.tabs.goBack())
     this.$.goForwardButton.addEventListener('click', () => chrome.tabs.goForward())
     this.$.reloadButton.addEventListener('click', () => chrome.tabs.reload())
+    this.$.homeButton.addEventListener('click', this.goHome.bind(this))
     this.$.addressUrl.addEventListener('keypress', this.onAddressUrlKeyPress.bind(this))
 
     this.$.minimizeButton.addEventListener('click', () =>
@@ -122,10 +124,22 @@ class WebUI {
   }
 
   onAddressUrlKeyPress(event) {
-    if (event.code === 'Enter') {
+    if (event.code === 'Enter' || event.code === 'NumpadEnter') {
       const url = this.$.addressUrl.value
       chrome.tabs.update({ url })
     }
+  }
+
+  handleNewTabKeys() {
+    if (event.code === 'Ctrl') {
+      const url = this.$.addressUrl.value
+      chrome.tabs.create()
+    }
+  }
+
+  goHome() {
+	const url = 'https://www.google.com/'
+    chrome.tabs.update({ url })
   }
 
   createTabNode(tab) {
@@ -137,6 +151,9 @@ class WebUI {
     })
     tabElem.querySelector('.close').addEventListener('click', () => {
       chrome.tabs.remove(tab.id)
+    })
+    tabElem.querySelector('.audio').addEventListener('click', () => {
+      chrome.tabs.update(tab.id, { muted: true })
     })
 
     this.$.tabList.appendChild(tabElem)

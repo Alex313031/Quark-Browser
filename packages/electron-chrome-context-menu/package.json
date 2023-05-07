@@ -19,7 +19,7 @@
   "author": "Samuel Maddock <sam@samuelmaddock.com>",
   "license": "MIT",
   "peerDependencies": {
-    "electron": "^22.3.8"
+    "electron": ">=9.0.0"
   },
   "devDependencies": {
     "electron": "^22.3.8",

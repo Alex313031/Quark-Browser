@@ -138,7 +138,7 @@ class WebUI {
   }
 
   goHome() {
-	const url = 'https://www.google.com/'
+    const url = 'https://www.google.com/'
     chrome.tabs.update({ url })
   }
 

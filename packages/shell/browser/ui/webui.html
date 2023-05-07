@@ -7,6 +7,7 @@
       :root {
         /* https://colorhunt.co/palette/161920 */
         --bg-color: #39375b;
+        --fg-color: #11bbee;
         --text-color: #ececec;
         --tab-color: #745c97;
         --toolbar-control-color: #d597ce;
@@ -198,7 +199,7 @@
 
       .address-bar:active {
         outline: 1px solid;
-        outline-color: #1be;
+        outline-color: var(--fg-color);
         border-radius: 2rem;
       }
 
@@ -216,7 +217,7 @@
       }
 
       .ui:hover {
-        color: #1be;
+        color: var(--fg-color);
       }
 
       .x:hover {

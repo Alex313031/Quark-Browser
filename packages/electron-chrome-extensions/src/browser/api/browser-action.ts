@@ -1,4 +1,4 @@
-import { Menu, MenuItem, protocol, nativeImage, app } from 'electron'
+import { Menu, MenuItem, protocol, nativeImage, app, BrowserWindow } from 'electron'
 import { ExtensionContext } from '../context'
 import { PopupView } from '../popup'
 import { ExtensionEvent } from '../router'
@@ -33,6 +33,7 @@ interface ActivateDetails {
   eventType: string
   extensionId: string
   tabId: number
+  anchorWindow: number,
   anchorRect: { x: number; y: number; width: number; height: number }
 }
 
@@ -396,10 +397,22 @@ export class BrowserActionAPI {
         throw new Error('Unable to get BrowserWindow from active tab')
       }
 
+      let anchorWin = null;
+
+      if (details.anchorWindow > -1) {
+        anchorWin = BrowserWindow.fromId(details.anchorWindow);
+      }
+
+      if (!anchorWin) {
+        // we'll use our parent window if there was no supplied anchor window
+        anchorWin = win;
+      }
+
       this.popup = new PopupView({
         extensionId,
         session: this.ctx.session,
         parent: win,
+        anchorWindow: anchorWin,
         url: popupUrl,
         anchorRect,
       })

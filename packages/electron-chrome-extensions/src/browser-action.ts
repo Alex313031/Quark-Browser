@@ -14,6 +14,7 @@ export const injectBrowserAction = () => {
     eventType: string
     extensionId: string
     tabId: number
+    anchorWindowId: number,
     anchorRect: { x: number; y: number; width: number; height: number }
   }
 
@@ -94,6 +95,41 @@ export const injectBrowserAction = () => {
         this.setAttribute('tab', `${tab}`)
       }
 
+     get anchorWindow(): number {
+        const anchorWindowId = parseInt(this.getAttribute('anchorWindow') || '', 10)
+        return typeof anchorWindowId === 'number' && !isNaN(anchorWindowId) ? anchorWindowId : -1
+      }
+
+      set anchorWindow(anchorWindow: number) {
+        this.setAttribute('anchorWindow', `${anchorWindow}`)
+      }
+
+      get x(): number | null {
+        const x = parseInt(this.getAttribute('x') || '', 10)
+        return typeof x === 'number' && !isNaN(x) ? x : null
+      }
+
+      set x(x: number | null) {
+        if (typeof x === 'number') {
+          this.setAttribute('x', `${x}`)
+        } else {
+          this.removeAttribute('x')
+        }
+      }
+
+      get y(): number | null {
+        const y = parseInt(this.getAttribute('y') || '', 10)
+        return typeof y === 'number' && !isNaN(y) ? y : null
+      }
+
+      set y(y: number | null) {
+        if (typeof y === 'number') {
+          this.setAttribute('y', `${y}`)
+        } else {
+          this.removeAttribute('y')
+        }
+      }
+
       get partition(): string | null {
         return this.getAttribute('partition')
       }
@@ -107,7 +143,7 @@ export const injectBrowserAction = () => {
       }
 
       static get observedAttributes() {
-        return ['id', 'tab', 'partition']
+        return ['id', 'tab', 'partition', 'anchorWindowId', 'x', 'y']
       }
 
       constructor() {
@@ -147,6 +183,7 @@ export const injectBrowserAction = () => {
           eventType: event.type,
           extensionId: this.id,
           tabId: this.tab,
+          anchorWindowId: this.anchorWindow,
           anchorRect: {
             x: rect.left,
             y: rect.top,
@@ -260,8 +297,43 @@ export const injectBrowserAction = () => {
         }
       }
 
+      get anchorWindow(): number {
+        const anchorWindowId = parseInt(this.getAttribute('anchorWindow') || '', 10)
+        return typeof anchorWindowId === 'number' && !isNaN(anchorWindowId) ? anchorWindowId : -1
+      }
+
+      set anchorWindow(anchorWindow: number) {
+        this.setAttribute('anchorWindow', `${anchorWindow}`)
+      }
+
+      get x(): number | null {
+        const x = parseInt(this.getAttribute('x') || '', 10)
+        return typeof x === 'number' && !isNaN(x) ? x : null
+      }
+
+      set x(x: number | null) {
+        if (typeof x === 'number') {
+          this.setAttribute('x', `${x}`)
+        } else {
+          this.removeAttribute('x')
+        }
+      }
+
+      get y(): number | null {
+        const y = parseInt(this.getAttribute('y') || '', 10)
+        return typeof y === 'number' && !isNaN(y) ? y : null
+      }
+
+      set y(y: number | null) {
+        if (typeof y === 'number') {
+          this.setAttribute('y', `${y}`)
+        } else {
+          this.removeAttribute('y')
+        }
+      }
+
       static get observedAttributes() {
-        return ['tab', 'partition']
+        return ['tab', 'partition', 'anchorWindow', 'x', 'y']
       }
 
       constructor() {
@@ -362,6 +434,15 @@ export const injectBrowserAction = () => {
         const tabId =
           typeof this.tab === 'number' && this.tab >= 0 ? this.tab : state.activeTabId || -1
 
+        const anchorWindowId =
+          typeof this.anchorWindow === 'number' && this.anchorWindow >= 0 ? this.anchorWindow : -1
+
+        const x =
+          typeof this.x === 'number' ? this.x : null
+
+        const y =
+          typeof this.y === 'number' ? this.y : null
+        
         // Create or update action buttons
         for (const action of state.actions) {
           let browserActionNode = this.shadowRoot?.querySelector(
@@ -381,6 +462,14 @@ export const injectBrowserAction = () => {
 
           if (this.partition) browserActionNode.partition = this.partition
           browserActionNode.tab = tabId
+          browserActionNode.anchorWindow = this.anchorWindow
+          if (x) {
+            browserActionNode.x = x;
+          }
+
+          if (y) {
+            browserActionNode.y = y;
+          }
         }
 
         // Remove any actions no longer in use

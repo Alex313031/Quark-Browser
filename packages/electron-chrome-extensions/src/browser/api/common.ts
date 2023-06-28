@@ -80,8 +80,8 @@ export const getIconPath = (
   iconSize: number = 32,
   resizeType = ResizeType.Up
 ) => {
-  const { browser_action, icons } = getExtensionManifest(extension)
-  const { default_icon } = browser_action || {}
+  const { action, browser_action, icons } = getExtensionManifest(extension)
+  const { default_icon } = action || browser_action || {}
 
   if (typeof default_icon === 'string') {
     const iconPath = default_icon

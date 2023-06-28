@@ -145,7 +145,7 @@ export const injectExtensionAPIs = () => {
      */
     const apiDefinitions: Partial<APIFactoryMap> = {
       browserAction: {
-        shouldInject: () => !!manifest.browser_action,
+        shouldInject: () => !!(manifest.action || manifest.browser_action),
         factory: (base) => {
           const api = {
             ...base,

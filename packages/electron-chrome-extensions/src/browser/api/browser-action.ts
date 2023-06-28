@@ -38,21 +38,29 @@ interface ActivateDetails {
 
 const getBrowserActionDefaults = (extension: Electron.Extension): ExtensionAction | undefined => {
   const manifest = getExtensionManifest(extension)
-  const { browser_action } = manifest
-  if (typeof browser_action === 'object') {
-    const action: ExtensionAction = {}
+  const { action, browser_action } = manifest
+  let manifestAction: any = {}
 
-    action.title = browser_action.default_title || manifest.name
-
-    const iconPath = getIconPath(extension)
-    if (iconPath) action.icon = { path: iconPath }
-
-    if (browser_action.default_popup) {
-      action.popup = browser_action.default_popup
-    }
-
-    return action
+  if (typeof action === 'object') {
+    manifestAction = action;
+  } else if (typeof browser_action === 'object') {
+    manifestAction = browser_action;
+  } else {
+    return;
   }
+
+  const extensionAction: ExtensionAction = {}
+
+  extensionAction.title = manifestAction.default_title || manifest.name
+
+  const iconPath = getIconPath(extension)
+  if (iconPath) extensionAction.icon = { path: iconPath }
+
+  if (manifestAction.default_popup) {
+    extensionAction.popup = manifestAction.default_popup
+  }
+
+  return extensionAction
 }
 
 interface ExtensionActionStore extends Partial<ExtensionAction> {

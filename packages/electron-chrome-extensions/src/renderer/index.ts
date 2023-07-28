@@ -1,5 +1,5 @@
 import { ipcRenderer, contextBridge, webFrame } from 'electron'
-import { addExtensionListener, removeExtensionListener } from './event'
+import { addExtensionListener, removeExtensionListener, hasExtensionListener } from './event'
 
 export const injectExtensionAPIs = () => {
   interface ExtensionMessageOptions {
@@ -54,6 +54,7 @@ export const injectExtensionAPIs = () => {
     invokeExtension,
     addExtensionListener,
     removeExtensionListener,
+    hasExtensionListener
   }
 
   // Function body to run in the main world.
@@ -97,13 +98,13 @@ export const injectExtensionAPIs = () => {
       removeListener(callback: T) {
         electron.removeExtensionListener(extensionId, this.name, callback)
       }
+      hasListener(callback: T): boolean {
+        return electron.hasExtensionListener(extensionId, this.name, callback)
+      }
 
       getRules(callback: (rules: chrome.events.Rule[]) => void): void
       getRules(ruleIdentifiers: string[], callback: (rules: chrome.events.Rule[]) => void): void
       getRules(ruleIdentifiers: any, callback?: any) {
-        throw new Error('Method not implemented.')
-      }
-      hasListener(callback: T): boolean {
         throw new Error('Method not implemented.')
       }
       removeRules(ruleIdentifiers?: string[] | undefined, callback?: (() => void) | undefined): void

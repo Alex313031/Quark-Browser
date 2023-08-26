@@ -13,6 +13,7 @@ interface PopupViewOptions {
   extensionId: string
   session: Session
   parent: BrowserWindow
+  anchorWindow: BrowserWindow
   url: string
   anchorRect: PopupAnchorRect
 }
@@ -23,8 +24,6 @@ const supportsPreferredSize = () => {
 }
 
 export class PopupView {
-  static POSITION_PADDING = 5
-
   static BOUNDS = {
     minWidth: 25,
     minHeight: 25,
@@ -34,6 +33,8 @@ export class PopupView {
 
   browserWindow?: BrowserWindow
   parent?: BrowserWindow
+  anchorWindow?: BrowserWindow
+  anchorWindowBounds?: Electron.Rectangle | null
   extensionId: string
 
   private anchorRect: PopupAnchorRect
@@ -48,7 +49,11 @@ export class PopupView {
   constructor(opts: PopupViewOptions) {
     this.parent = opts.parent
     this.extensionId = opts.extensionId
+    this.anchorWindow = opts.anchorWindow
     this.anchorRect = opts.anchorRect
+
+    this.anchorWindowBounds = this.anchorWindow ? this.anchorWindow.getBounds() : this.parent ?
+      this.parent.getBounds() : null;
 
     this.browserWindow = new BrowserWindow({
       show: false,
@@ -193,14 +198,13 @@ export class PopupView {
   }
 
   private updatePosition() {
-    if (!this.browserWindow || !this.parent) return
+    if (!this.browserWindow || !this.anchorWindowBounds) return
 
-    const winBounds = this.parent.getBounds()
     const viewBounds = this.browserWindow.getBounds()
 
     // TODO: support more orientations than just top-right
-    let x = winBounds.x + this.anchorRect.x + this.anchorRect.width - viewBounds.width
-    let y = winBounds.y + this.anchorRect.y + this.anchorRect.height + PopupView.POSITION_PADDING
+    let x = this.anchorWindowBounds.x + this.anchorRect.x
+    let y = this.anchorWindowBounds.y + this.anchorRect.y
 
     // Convert to ints
     x = Math.floor(x)

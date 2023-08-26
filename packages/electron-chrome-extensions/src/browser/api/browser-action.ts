@@ -1,4 +1,4 @@
-import { Menu, MenuItem, protocol, nativeImage, app } from 'electron'
+import { Menu, MenuItem, protocol, nativeImage, app, BrowserWindow } from 'electron'
 import { ExtensionContext } from '../context'
 import { PopupView } from '../popup'
 import { ExtensionEvent } from '../router'
@@ -33,26 +33,35 @@ interface ActivateDetails {
   eventType: string
   extensionId: string
   tabId: number
+  anchorWindow: number,
   anchorRect: { x: number; y: number; width: number; height: number }
 }
 
 const getBrowserActionDefaults = (extension: Electron.Extension): ExtensionAction | undefined => {
   const manifest = getExtensionManifest(extension)
-  const { browser_action } = manifest
-  if (typeof browser_action === 'object') {
-    const action: ExtensionAction = {}
+  const { action, browser_action } = manifest
+  let manifestAction: any = {}
 
-    action.title = browser_action.default_title || manifest.name
-
-    const iconPath = getIconPath(extension)
-    if (iconPath) action.icon = { path: iconPath }
-
-    if (browser_action.default_popup) {
-      action.popup = browser_action.default_popup
-    }
-
-    return action
+  if (typeof action === 'object') {
+    manifestAction = action;
+  } else if (typeof browser_action === 'object') {
+    manifestAction = browser_action;
+  } else {
+    return;
   }
+
+  const extensionAction: ExtensionAction = {}
+
+  extensionAction.title = manifestAction.default_title || manifest.name
+
+  const iconPath = getIconPath(extension)
+  if (iconPath) extensionAction.icon = { path: iconPath }
+
+  if (manifestAction.default_popup) {
+    extensionAction.popup = manifestAction.default_popup
+  }
+
+  return extensionAction
 }
 
 interface ExtensionActionStore extends Partial<ExtensionAction> {
@@ -388,10 +397,22 @@ export class BrowserActionAPI {
         throw new Error('Unable to get BrowserWindow from active tab')
       }
 
+      let anchorWin = null;
+
+      if (details.anchorWindow > -1) {
+        anchorWin = BrowserWindow.fromId(details.anchorWindow);
+      }
+
+      if (!anchorWin) {
+        // we'll use our parent window if there was no supplied anchor window
+        anchorWin = win;
+      }
+
       this.popup = new PopupView({
         extensionId,
         session: this.ctx.session,
         parent: win,
+        anchorWindow: anchorWin,
         url: popupUrl,
         anchorRect,
       })

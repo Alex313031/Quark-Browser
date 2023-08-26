@@ -368,10 +368,6 @@ export class TabsAPI {
     const tab = this.ctx.store.getTabById(tabId)
     if (!tab) return
 
-    const activeTab = this.ctx.store.getActiveTabFromWebContents(tab)
-    const activeChanged = activeTab?.id !== tabId
-    if (!activeChanged) return
-
     const win = this.ctx.store.tabToWindow.get(tab)
 
     this.ctx.store.setActiveTab(tab)

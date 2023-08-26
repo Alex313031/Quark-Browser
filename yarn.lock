@@ -1771,6 +1771,13 @@ diff@^4.0.1:
   resolved "https://registry.yarnpkg.com/diff/-/diff-4.0.2.tgz#60f3aecb89d5fae520c11aa19efc2bb982aade7d"
   integrity sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==
 
+electron-chrome-extensions@^3.4.0:
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/electron-chrome-extensions/-/electron-chrome-extensions-3.10.0.tgz#d71699a18d657220e4266b77bb897685e4cf3e1b"
+  integrity sha512-Q0ri/fGfpqTvePLMLL4EyKtKYm4dlcMOArZezR4wI+wEpIEBDr5S5kT4b8vrb05DzMp5ZE2If64H/n7L5lxVbw==
+  dependencies:
+    debug "^4.3.1"
+
 electron-to-chromium@^1.4.188:
   version "1.4.194"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.194.tgz#2f83fcec5067907044a3d502ac7c3efb1fe6430b"

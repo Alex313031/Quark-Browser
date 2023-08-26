@@ -1,6 +1,6 @@
 {
-  "name": "electron-chrome-extensions",
-  "version": "3.10.1",
+  "name": "@polypane/electron-chrome-extensions",
+  "version": "3.15.2",
   "description": "Chrome extension support for Electron",
   "main": "dist/index.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "chrome",
     "extensions"
   ],
-  "repository": "https://github.com/samuelmaddock/electron-browser-shell",
+  "repository": "https://github.com/polypane/electron-chrome-extensions",
   "author": "Samuel Maddock <sam@samuelmaddock.com>",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {

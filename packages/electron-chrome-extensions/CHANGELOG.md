@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `chrome.webNavigation` internals erroring due to electron@25.x.y deprecations.
 - Unloaded extensions are now removed from `<browser-action-list>`.
+## [3.15.2] - 2023-05-15
+
+- close popups on tab change
+
+## [3.15.1] - 2023-04-12
+
+- fix: remove unloaded extensions from <browser-action-list>
+- handle a tab of null explicitly as no tab in executeScript
+- use the app store ID instead of the generated ID for the homepage context menu
+- turn devtool for preload off
 
 ## [3.10.0] - 2023-01-16
 

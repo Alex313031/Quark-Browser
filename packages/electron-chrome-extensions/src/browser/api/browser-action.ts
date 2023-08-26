@@ -176,6 +176,7 @@ export class BrowserActionAPI {
 
     this.ctx.store.on('active-tab-changed', () => {
       this.onUpdate()
+      this.popup?.browserWindow?.blur();
     })
 
     // Clear out tab details when removed
@@ -445,7 +446,7 @@ export class BrowserActionAPI {
       label: extension.name,
       click: () => {
         const homePageUrl =
-          manifest.homepage_url || `https://chrome.google.com/webstore/detail/${extension.id}`
+          manifest.homepage_url || `https://chrome.google.com/webstore/detail/${extension.path.split("/").at(-1)}`
         this.ctx.store.createTab({ url: homePageUrl })
       },
     })

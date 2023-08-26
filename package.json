@@ -2,7 +2,7 @@
   "name": "electron-browser-shell",
   "version": "1.0.0",
   "description": "A minimal browser shell built on Electron.",
-  "private": true,
+  "private": false,
   "workspaces": [
     "packages/shell",
     "packages/electron-chrome-extensions",
@@ -21,9 +21,8 @@
     "test:shell": "yarn --cwd ./packages/shell test"
   },
   "license": "GPL-3.0",
-  "author": "Samuel Maddock <sam@samuelmaddock.com>",
   "dependencies": {},
-  "repository": "git@github.com:samuelmaddock/electron-browser-shell.git",
+  "repository": "git@github.com:djcas9/electron-browser-shell.git",
   "prettier": {
     "printWidth": 100,
     "singleQuote": true,
